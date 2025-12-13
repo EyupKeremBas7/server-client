@@ -32,6 +32,23 @@ function updateKeyHint() {
             keyInput.placeholder = 'a,b şeklinde iki sayı girin';
             keyHint.textContent = 'Örnek: 5,8 (a ve b sayıları virgülle ayrılmış)';
             break;
+        case 'sha1':
+            keyInput.type = 'text';
+            keyInput.placeholder = 'Anahtar gerekmez';
+            keyInput.disabled = true;
+            keyHint.textContent = 'SHA-1 hash fonksiyonu - anahtar gerekmez';
+            break;
+        case 'sha2':
+            keyInput.type = 'text';
+            keyInput.placeholder = 'Anahtar gerekmez';
+            keyInput.disabled = true;
+            keyHint.textContent = 'SHA-256 hash fonksiyonu - anahtar gerekmez';
+            break;
+    }
+    
+    // Hash yöntemleri dışında input'u aktif et
+    if (method !== 'sha1' && method !== 'sha2') {
+        keyInput.disabled = false;
     }
 }
 
@@ -40,14 +57,22 @@ function sifreleVeGonder() {
     const anahtar = document.getElementById('anahtar').value;
     const yontem = document.getElementById('sifrele-yontem').value;
     
-    if (!mesaj || !anahtar) {
-        alert('Lütfen mesaj ve anahtar girin!');
+    // Hash yöntemleri için anahtar gerekmez
+    const hashYontemleri = ['sha1', 'sha2'];
+    
+    if (!mesaj) {
+        alert('Lütfen mesaj girin!');
+        return;
+    }
+    
+    if (!hashYontemleri.includes(yontem) && !anahtar) {
+        alert('Lütfen anahtar girin!');
         return;
     }
 
     const data = {
         method: yontem,
-        key: anahtar,
+        key: hashYontemleri.includes(yontem) ? '' : anahtar,
         message: mesaj,
         encrypted: true
     };

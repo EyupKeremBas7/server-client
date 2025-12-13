@@ -2,6 +2,8 @@ from Klasik_Kripto.sezar import sifrele as sezar_sifrele, desifrele as sezar_des
 from Klasik_Kripto.vigenere import vigenere_sifreleme, vigenere_desifreleme
 from Klasik_Kripto.substitution import substitution_sifrele, substitution_desifrele
 from Klasik_Kripto.affine import affine_sifrele, affine_desifrele
+from Klasik_Kripto.sha1 import sha1_sifrele
+from Klasik_Kripto.sha2 import sha2_sifrele
 
 class CryptoMethods:
     @staticmethod
@@ -16,6 +18,10 @@ class CryptoMethods:
             elif method == "affine":
                 a, b = map(int, key.split(','))
                 return affine_sifrele(text, a, b)
+            elif method == "sha1":
+                return sha1_sifrele(text)
+            elif method == "sha2":
+                return sha2_sifrele(text)
             else:
                 raise ValueError(f"Unsupported encryption method: {method}")
         except Exception as e:

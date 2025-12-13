@@ -5,12 +5,17 @@ ws.onmessage = function(event) {
     const uniqueId = Date.now();
     const mesajDiv = document.createElement('div');
     mesajDiv.className = 'mesaj';
+    
+    // Hash yöntemleri için deşifreleme bölümünü gösterme
+    const isHash = data.method === 'sha1' || data.method === 'sha2';
+    
     mesajDiv.innerHTML = `
         <div class="mesaj-header">
             <span class="method-badge">${data.method}</span>
             <span class="timestamp">${new Date().toLocaleTimeString()}</span>
         </div>
-        <p><strong>Şifreli Mesaj:</strong> ${data.encrypted_message}</p>
+        <p><strong>${isHash ? 'Hash Değeri' : 'Şifreli Mesaj'}:</strong> ${data.encrypted_message}</p>
+        ${isHash ? '<p class="hash-note"><em>Hash tek yönlüdür, deşifre edilemez.</em></p>' : `
         <div class="decipher-section">
             <input type="text" id="key_${uniqueId}" 
                    placeholder="Deşifreleme anahtarını girin" 
@@ -21,6 +26,7 @@ ws.onmessage = function(event) {
             </button>
         </div>
         <div id="decrypted_${uniqueId}" class="decrypted-message" style="display: none;"></div>
+        `}
     `;
     
     document.getElementById('mesajlar').prepend(mesajDiv);

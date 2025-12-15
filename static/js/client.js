@@ -32,6 +32,16 @@ function updateKeyHint() {
             keyInput.placeholder = 'a,b şeklinde iki sayı girin';
             keyHint.textContent = 'Örnek: 5,8 (a ve b sayıları virgülle ayrılmış)';
             break;
+        case 'hill':
+            keyInput.type = 'text';
+            keyInput.placeholder = '2x2 veya 3x3 matris değerleri girin';
+            keyHint.textContent = 'Örnek: 3,3,2,5 (2x2) veya 6,24,1,13,16,10,20,17,15 (3x3)';
+            break;
+        case 'rotate':
+            keyInput.type = 'number';
+            keyInput.placeholder = 'Kaydırma sayısını girin (örn: 13)';
+            keyHint.textContent = 'ROT-13 için 13 girin';
+            break;
         case 'sha1':
             keyInput.type = 'text';
             keyInput.placeholder = 'Anahtar gerekmez';
@@ -46,7 +56,6 @@ function updateKeyHint() {
             break;
     }
     
-    // Hash yöntemleri dışında input'u aktif et
     if (method !== 'sha1' && method !== 'sha2') {
         keyInput.disabled = false;
     }
@@ -57,7 +66,6 @@ function sifreleVeGonder() {
     const anahtar = document.getElementById('anahtar').value;
     const yontem = document.getElementById('sifrele-yontem').value;
     
-    // Hash yöntemleri için anahtar gerekmez
     const hashYontemleri = ['sha1', 'sha2'];
     
     if (!mesaj) {

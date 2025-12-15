@@ -6,7 +6,6 @@ ws.onmessage = function(event) {
     const mesajDiv = document.createElement('div');
     mesajDiv.className = 'mesaj';
     
-    // Hash yöntemleri için deşifreleme bölümünü gösterme
     const isHash = data.method === 'sha1' || data.method === 'sha2';
     
     mesajDiv.innerHTML = `

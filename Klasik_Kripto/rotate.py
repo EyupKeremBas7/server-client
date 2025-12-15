@@ -1,10 +1,4 @@
-
-
 def rotate_sifrele(metin, anahtar):
-    """
-    Rotate (Caesar) Cipher - Şifreleme
-    Her harfi anahtar kadar kaydırır
-    """
     sifreli_metin = ""
 
     for char in metin:
@@ -19,7 +13,4 @@ def rotate_sifrele(metin, anahtar):
 
 
 def rotate_desifre(sifreli_metin, anahtar):
-    """
-    Rotate (Caesar) Cipher - Deşifreleme
-    """
     return rotate_sifrele(sifreli_metin, -anahtar)

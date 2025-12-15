@@ -2,6 +2,8 @@ from Klasik_Kripto.sezar import sifrele as sezar_sifrele, desifrele as sezar_des
 from Klasik_Kripto.vigenere import vigenere_sifreleme, vigenere_desifreleme
 from Klasik_Kripto.substitution import substitution_sifrele, substitution_desifrele
 from Klasik_Kripto.affine import affine_sifrele, affine_desifrele
+from Klasik_Kripto.hill import hill_sifrele, hill_desifre
+from Klasik_Kripto.rotate import rotate_sifrele, rotate_desifre
 from Klasik_Kripto.sha1 import sha1_sifrele
 from Klasik_Kripto.sha2 import sha2_sifrele
 
@@ -18,6 +20,21 @@ class CryptoMethods:
             elif method == "affine":
                 a, b = map(int, key.split(','))
                 return affine_sifrele(text, a, b)
+            elif method == "hill":
+                degerler = list(map(int, key.split(',')))
+                if len(degerler) == 4:
+                    matris = [[degerler[0], degerler[1]], [degerler[2], degerler[3]]]
+                elif len(degerler) == 9:
+                    matris = [
+                        [degerler[0], degerler[1], degerler[2]],
+                        [degerler[3], degerler[4], degerler[5]],
+                        [degerler[6], degerler[7], degerler[8]]
+                    ]
+                else:
+                    raise ValueError("Hill anahtarı 4 (2x2) veya 9 (3x3) değer olmalıdır!")
+                return hill_sifrele(text, matris)
+            elif method == "rotate":
+                return rotate_sifrele(text, int(key))
             elif method == "sha1":
                 return sha1_sifrele(text)
             elif method == "sha2":
@@ -45,6 +62,21 @@ class CryptoMethods:
                     return affine_desifrele(text, a, b)
                 except ValueError:
                     raise ValueError("Affine anahtarı 'a,b' formatında olmalıdır!")
+            elif method == "hill":
+                degerler = list(map(int, key.split(',')))
+                if len(degerler) == 4:
+                    matris = [[degerler[0], degerler[1]], [degerler[2], degerler[3]]]
+                elif len(degerler) == 9:
+                    matris = [
+                        [degerler[0], degerler[1], degerler[2]],
+                        [degerler[3], degerler[4], degerler[5]],
+                        [degerler[6], degerler[7], degerler[8]]
+                    ]
+                else:
+                    raise ValueError("Hill anahtarı 4 (2x2) veya 9 (3x3) değer olmalıdır!")
+                return hill_desifre(text, matris)
+            elif method == "rotate":
+                return rotate_desifre(text, int(key))
             else:
                 raise ValueError(f"Desteklenmeyen şifreleme yöntemi: {method}")
         except Exception as e:

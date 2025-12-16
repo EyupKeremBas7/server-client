@@ -6,6 +6,8 @@ from Klasik_Kripto.hill import hill_sifrele, hill_desifre
 from Klasik_Kripto.rotate import rotate_sifrele, rotate_desifre
 from Klasik_Kripto.sha1 import sha1_sifrele
 from Klasik_Kripto.sha2 import sha2_sifrele
+from Klasik_Kripto.aes import aes_sifrele, aes_desifre
+from Klasik_Kripto.rsa import rsa_sifrele_metin, rsa_desifre_metin, rsa_anahtar_uret
 
 class CryptoMethods:
     @staticmethod
@@ -39,6 +41,13 @@ class CryptoMethods:
                 return sha1_sifrele(text)
             elif method == "sha2":
                 return sha2_sifrele(text)
+            elif method == "aes":
+                return aes_sifrele(text, key)
+            elif method == "rsa":
+                # RSA için key formatı: e,n (public key)
+                e, n = map(int, key.split(','))
+                public_key = (e, n)
+                return rsa_sifrele_metin(text, public_key)
             else:
                 raise ValueError(f"Unsupported encryption method: {method}")
         except Exception as e:
@@ -77,6 +86,13 @@ class CryptoMethods:
                 return hill_desifre(text, matris)
             elif method == "rotate":
                 return rotate_desifre(text, int(key))
+            elif method == "aes":
+                return aes_desifre(text, key)
+            elif method == "rsa":
+                # RSA için key formatı: d,n (private key)
+                d, n = map(int, key.split(','))
+                private_key = (d, n)
+                return rsa_desifre_metin(text, private_key)
             else:
                 raise ValueError(f"Desteklenmeyen şifreleme yöntemi: {method}")
         except Exception as e:

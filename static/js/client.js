@@ -1,6 +1,6 @@
 const ws = new WebSocket(`ws://${window.location.host}/ws`);
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const methodSelect = document.getElementById('sifrele-yontem');
     methodSelect.addEventListener('change', updateKeyHint);
     updateKeyHint(); // Initial update
@@ -10,8 +10,8 @@ function updateKeyHint() {
     const method = document.getElementById('sifrele-yontem').value;
     const keyInput = document.getElementById('anahtar');
     const keyHint = document.getElementById('anahtar-aciklama');
-    
-    switch(method) {
+
+    switch (method) {
         case 'caesar':
             keyInput.type = 'number';
             keyInput.placeholder = 'Kaydırma sayısını girin (örn: 3)';
@@ -54,8 +54,18 @@ function updateKeyHint() {
             keyInput.disabled = true;
             keyHint.textContent = 'SHA-256 hash fonksiyonu - anahtar gerekmez';
             break;
+        case 'aes':
+            keyInput.type = 'text';
+            keyInput.placeholder = '16 karakterlik anahtar girin';
+            keyHint.textContent = 'AES-128 için tam 16 karakter uzunluğunda anahtar gereklidir';
+            break;
+        case 'rsa':
+            keyInput.type = 'text';
+            keyInput.placeholder = 'Public key (e,n) formatında girin';
+            keyHint.textContent = 'Örnek: 65537,123456789 - RSA anahtar çifti kullanın';
+            break;
     }
-    
+
     if (method !== 'sha1' && method !== 'sha2') {
         keyInput.disabled = false;
     }
@@ -65,14 +75,14 @@ function sifreleVeGonder() {
     const mesaj = document.getElementById('mesaj').value;
     const anahtar = document.getElementById('anahtar').value;
     const yontem = document.getElementById('sifrele-yontem').value;
-    
+
     const hashYontemleri = ['sha1', 'sha2'];
-    
+
     if (!mesaj) {
         alert('Lütfen mesaj girin!');
         return;
     }
-    
+
     if (!hashYontemleri.includes(yontem) && !anahtar) {
         alert('Lütfen anahtar girin!');
         return;
@@ -84,7 +94,7 @@ function sifreleVeGonder() {
         message: mesaj,
         encrypted: true
     };
-    
+
     ws.send(JSON.stringify(data));
     document.getElementById('mesaj').value = '';
     document.getElementById('anahtar').value = '';

@@ -74,6 +74,18 @@ function getKeyInputDetails(method) {
                 placeholder: '16 karakterlik anahtar',
                 hint: 'AES-128 için tam 16 karakter'
             };
+        case 'des':
+            return {
+                type: 'text',
+                placeholder: '8 karakterlik anahtar',
+                hint: 'DES için tam 8 karakter'
+            };
+        case 'route':
+            return {
+                type: 'text',
+                placeholder: 'Satır,Sütun (örn: 4,5)',
+                hint: 'Matris boyutlarını virgülle ayırarak girin'
+            };
         case 'rsa':
             return {
                 type: 'text',

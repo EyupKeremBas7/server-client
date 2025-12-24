@@ -26,6 +26,8 @@
                 <option value="sha1">SHA-1 Hash</option>
                 <option value="sha2">SHA-256 Hash</option>
                 <option value="aes">AES-128 (Simetrik)</option>
+                <option value="des">DES (Simetrik 64-bit)</option>
+                <option value="route">Route Cipher (Transposition)</option>
                 <option value="rsa">RSA (Asimetrik)</option>
                 <option value="columnar">Columnar Transposition</option>
             </select>
@@ -40,6 +42,15 @@
         <div>
             <label>Mesaj</label>
             <textarea id="mesaj" rows="4" placeholder="Şifrelenecek mesajınızı buraya yazın..."></textarea>
+        </div>
+
+        <div style="margin-bottom: 15px; border-top: 1px solid #444; padding-top: 15px;">
+            <label>Veya Dosya Yükle</label>
+            <input type="file" id="dosya-input" style="color: white;">
+            <button class="button" onclick="dosyaSifreleIndir()" style="margin-top: 10px; background-color: #4CAF50;">
+                <img src="/static/images/lock.webp" alt="Kilit" style="width: 20px;">
+                Dosyayı Şifrele ve İndir
+            </button>
         </div>
 
         <button class="button" onclick="sifreleVeGonder()">

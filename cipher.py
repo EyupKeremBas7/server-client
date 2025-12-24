@@ -7,10 +7,32 @@ from Klasik_Kripto.rotate import rotate_sifrele, rotate_desifre
 from Klasik_Kripto.sha1 import sha1_sifrele
 from Klasik_Kripto.sha2 import sha2_sifrele
 from Klasik_Kripto.aes import aes_sifrele, aes_desifre
-from Klasik_Kripto.rsa import rsa_sifrele_metin, rsa_desifre_metin, rsa_anahtar_uret
+from Klasik_Kripto.rsa import rsa_sifrele_metin, rsa_desifre_metin, rsa_anahtar_uret, rsa_imzala, rsa_dogrula
 from Klasik_Kripto.columnar import columnar_sifrele, columnar_desifre
+from Klasik_Kripto.ecc import EllipticCurve
+from Klasik_Kripto.des import des_sifrele, des_desifre
+from Klasik_Kripto.route import route_sifrele, route_desifre
 
 class CryptoMethods:
+    @staticmethod
+    def generate_ecc_keypair():
+        return EllipticCurve.generate_keypair()
+
+    @staticmethod
+    def compute_ecdh_secret(private_key, other_public_key):
+        # ECDH: Shared Secret = priv * pub
+        # Result is a point (x, y). Use x as the secret.
+        secret_point = EllipticCurve.scalar_mult(private_key, other_public_key)
+        return str(secret_point[0]) # Return x-coord as string for simplicity as key
+
+    @staticmethod
+    def sign_message(text, private_key):
+        return rsa_imzala(text, private_key)
+
+    @staticmethod
+    def verify_signature(text, signature, public_key):
+        return rsa_dogrula(text, signature, public_key)
+
     @staticmethod
     def encrypt(method: str, text: str, key: str) -> str:
         try:
@@ -50,6 +72,14 @@ class CryptoMethods:
                 return rsa_sifrele_metin(text, public_key)
             elif method == "columnar":
                 return columnar_sifrele(text, key)
+            elif method == "des":
+                return des_sifrele(text, key)
+            elif method == "route":
+                try:
+                    r, c = map(int, key.split(','))
+                    return route_sifrele(text, r, c)
+                except ValueError:
+                    raise ValueError("Route cipher requires key format 'rows,cols' (e.g. 4,5)")
             else:
                 raise ValueError(f"Unsupported encryption method: {method}")
         except Exception as e:
@@ -96,6 +126,14 @@ class CryptoMethods:
                 return rsa_desifre_metin(text, private_key)
             elif method == "columnar":
                 return columnar_desifre(text, key)
+            elif method == "des":
+                return des_desifre(text, key)
+            elif method == "route":
+                try:
+                    r, c = map(int, key.split(','))
+                    return route_desifre(text, r, c)
+                except ValueError:
+                    raise ValueError("Route cipher requires key format 'rows,cols' (e.g. 4,5)")
             else:
                 raise ValueError(f"Desteklenmeyen şifreleme yöntemi: {method}")
         except Exception as e:

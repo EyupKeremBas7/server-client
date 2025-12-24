@@ -1,3 +1,6 @@
+import secrets
+from Klasik_Kripto.sha2 import sha2_sifrele
+
 def _gcd(a, b):
     while b:
         a, b = b, a % b
@@ -42,49 +45,30 @@ def _asal_mi(n, k=5):
                 return True
         return False
     
-    taniklar = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]
-    for a in taniklar:
-        if a >= n:
-            continue
+    # Use random witnesses for better security with large numbers
+    for _ in range(k):
+        a = secrets.randbelow(n - 4) + 2
         if not tanik_testi(a):
             return False
     return True
 
 
-def _rastgele_asal(bit_uzunlugu, seed=None):
-    if seed is None:
-        import time
-        seed = int(time.time() * 1000000)
-    
-    a = 1103515245
-    c = 12345
-    m = 2 ** 31
-    
-    def rastgele():
-        nonlocal seed
-        seed = (a * seed + c) % m
-        return seed
-    
+def _rastgele_asal(bit_uzunlugu):
     while True:
-        n = 0
-        for _ in range(bit_uzunlugu // 16 + 1):
-            n = (n << 16) | (rastgele() & 0xFFFF)
-        n = n % (2 ** bit_uzunlugu)
-        n |= (1 << (bit_uzunlugu - 1))
-        n |= 1
+        # Generate a random odd number
+        n = secrets.randbits(bit_uzunlugu)
+        n |= (1 << (bit_uzunlugu - 1)) | 1
         
         if _asal_mi(n):
             return n
 
 
 def rsa_anahtar_uret(bit_uzunlugu=512):
-    import time
-    
-    p = _rastgele_asal(bit_uzunlugu // 2, int(time.time() * 1000000))
-    q = _rastgele_asal(bit_uzunlugu // 2, int(time.time() * 1000000) + 12345)
+    p = _rastgele_asal(bit_uzunlugu // 2)
+    q = _rastgele_asal(bit_uzunlugu // 2)
     
     while p == q:
-        q = _rastgele_asal(bit_uzunlugu // 2, int(time.time() * 1000000) + 67890)
+        q = _rastgele_asal(bit_uzunlugu // 2)
     
     n = p * q
     phi = (p - 1) * (q - 1)
@@ -99,25 +83,25 @@ def rsa_anahtar_uret(bit_uzunlugu=512):
 
 
 def rsa_sifrele(metin, public_key):
+    """
+    Standart RSA şifreleme (Textbook).
+    Güvenlik için PKCS#1 padding kullanılmalıdır, bu eğitim amaçlıdır.
+    """
     e, n = public_key
-    
     sifreli = []
     for char in metin:
         m = ord(char)
         c = pow(m, e, n)
         sifreli.append(c)
-    
     return sifreli
 
 
 def rsa_desifre(sifreli_liste, private_key):
     d, n = private_key
-    
     cozulmus_metin = ""
     for c in sifreli_liste:
         m = pow(c, d, n)
         cozulmus_metin += chr(m)
-    
     return cozulmus_metin
 
 
@@ -129,3 +113,34 @@ def rsa_sifrele_metin(metin, public_key):
 def rsa_desifre_metin(sifreli_metin, private_key):
     sifreli_liste = [int(x) for x in sifreli_metin.split(',')]
     return rsa_desifre(sifreli_liste, private_key)
+
+
+def rsa_imzala(metin, private_key):
+    """
+    Mesajı imzalar. (Hash + RSA Sign)
+    """
+    d, n = private_key
+    # 1. Mesajın özetini al
+    ozet_hex = sha2_sifrele(metin)
+    ozet_int = int(ozet_hex, 16)
+    
+    # 2. Özeti imzala (s = m^d mod n)
+    imza = pow(ozet_int, d, n)
+    return hex(imza)[2:]
+
+
+def rsa_dogrula(metin, imza_hex, public_key):
+    """
+    İmzayı doğrular.
+    """
+    e, n = public_key
+    imza_int = int(imza_hex, 16)
+    
+    # 1. İmzadan özeti elde et (m = s^e mod n)
+    ozet_int_verify = pow(imza_int, e, n)
+    
+    # 2. Mesajın gerçek özetini al
+    ozet_hex = sha2_sifrele(metin)
+    ozet_int_original = int(ozet_hex, 16)
+    
+    return ozet_int_verify == ozet_int_original

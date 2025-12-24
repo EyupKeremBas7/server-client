@@ -64,6 +64,11 @@ function updateKeyHint() {
             keyInput.placeholder = 'Public key (e,n) formatında girin';
             keyHint.textContent = 'Örnek: 65537,123456789 - RSA anahtar çifti kullanın';
             break;
+        case 'columnar':
+            keyInput.type = 'text';
+            keyInput.placeholder = 'Anahtar kelimeyi girin';
+            keyHint.textContent = 'Sütunları karıştırmak için bir anahtar kelime girin';
+            break;
     }
 
     if (method !== 'sha1' && method !== 'sha2') {

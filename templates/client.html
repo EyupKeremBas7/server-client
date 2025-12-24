@@ -1,38 +1,41 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <title>Mesaj Şifreleme</title>
     <link rel="stylesheet" href="/static/css/client.css">
 </head>
+
 <body>
     <div class="container">
         <div class="header">
             <img src="/static/images/lock.webp" alt="Kilit İkonu">
             <h2 style="color: white;">İstemci - Mesaj Şifreleme</h2>
         </div>
-        
-    <div>
-        <label>Şifreleme Yöntemi</label>
-        <select id="sifrele-yontem">
-            <option value="caesar">Caesar Cipher</option>
-            <option value="vigenere">Vigenère Cipher</option>
-            <option value="substitution">Substitution Cipher</option>
-            <option value="affine">Affine Cipher</option>
-            <option value="hill">Hill Cipher</option>
-            <option value="rotate">Rotate (ROT) Cipher</option>
-            <option value="sha1">SHA-1 Hash</option>
-            <option value="sha2">SHA-256 Hash</option>
-            <option value="aes">AES-128 (Simetrik)</option>
-            <option value="rsa">RSA (Asimetrik)</option>
-        </select>
-    </div>
 
-    <div>
-        <label>Anahtar</label>
-        <input type="text" id="anahtar" placeholder="Şifreleme anahtarını girin">
-        <small id="anahtar-aciklama"></small>
-    </div>
+        <div>
+            <label>Şifreleme Yöntemi</label>
+            <select id="sifrele-yontem">
+                <option value="caesar">Caesar Cipher</option>
+                <option value="vigenere">Vigenère Cipher</option>
+                <option value="substitution">Substitution Cipher</option>
+                <option value="affine">Affine Cipher</option>
+                <option value="hill">Hill Cipher</option>
+                <option value="rotate">Rotate (ROT) Cipher</option>
+                <option value="sha1">SHA-1 Hash</option>
+                <option value="sha2">SHA-256 Hash</option>
+                <option value="aes">AES-128 (Simetrik)</option>
+                <option value="rsa">RSA (Asimetrik)</option>
+                <option value="columnar">Columnar Transposition</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Anahtar</label>
+            <input type="text" id="anahtar" placeholder="Şifreleme anahtarını girin">
+            <small id="anahtar-aciklama"></small>
+        </div>
 
         <div>
             <label>Mesaj</label>
@@ -46,4 +49,5 @@
     </div>
     <script src="/static/js/client.js"></script>
 </body>
+
 </html>

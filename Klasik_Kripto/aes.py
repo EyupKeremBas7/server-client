@@ -177,4 +177,7 @@ def aes_desifre(sifreli_hex, anahtar):
         
         cozulmus += _state_to_bytes(state)
     
-    return _unpad(cozulmus).decode('utf-8')
+    try:
+        return _unpad(cozulmus).decode('utf-8')
+    except UnicodeDecodeError:
+        return _unpad(cozulmus)

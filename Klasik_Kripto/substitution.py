@@ -26,3 +26,13 @@ def substitution_desifrele(cipher_text, key):
             plain_text += ch
     return plain_text
 
+if __name__ == "__main__":
+    anahtar = "phqgiumeaylnofdxjkrcvstzwb" 
+    metin = "IYIPAZARLAR"
+    sifreli = substitution_sifrele(metin, anahtar)
+    cozulmus = substitution_desifrele(sifreli, anahtar)
+
+    print("Anahtar:", anahtar)
+    print("Girdi:", metin)
+    print("Şifreli:", sifreli)      
+    print("Çözüldü:", cozulmus)

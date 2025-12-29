@@ -110,10 +110,10 @@ def hill_desifre(sifreli_metin, anahtar_matris):
     elif n == 3:
         ters_matris = _ters_matris_3x3(anahtar_matris)
     else:
-        return "Sadece 2x2 ve 3x3 matrisler destekleniyor"
+        raise ValueError("Sadece 2x2 ve 3x3 matrisler destekleniyor")
     
     if ters_matris is None:
-        return "Anahtar matrisin tersi bulunamadı"
+        raise ValueError("Anahtar matrisin tersi bulunamadı")
     
     sifreli_metin = ''.join([c.upper() for c in sifreli_metin if c.isalpha()])
     

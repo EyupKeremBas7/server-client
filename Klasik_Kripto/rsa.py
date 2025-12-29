@@ -45,7 +45,6 @@ def _asal_mi(n, k=5):
                 return True
         return False
     
-    # Use random witnesses for better security with large numbers
     for _ in range(k):
         a = secrets.randbelow(n - 4) + 2
         if not tanik_testi(a):
@@ -55,7 +54,6 @@ def _asal_mi(n, k=5):
 
 def _rastgele_asal(bit_uzunlugu):
     while True:
-        # Generate a random odd number
         n = secrets.randbits(bit_uzunlugu)
         n |= (1 << (bit_uzunlugu - 1)) | 1
         
@@ -120,11 +118,9 @@ def rsa_imzala(metin, private_key):
     Mesajı imzalar. (Hash + RSA Sign)
     """
     d, n = private_key
-    # 1. Mesajın özetini al
     ozet_hex = sha2_sifrele(metin)
     ozet_int = int(ozet_hex, 16)
     
-    # 2. Özeti imzala (s = m^d mod n)
     imza = pow(ozet_int, d, n)
     return hex(imza)[2:]
 
@@ -136,10 +132,8 @@ def rsa_dogrula(metin, imza_hex, public_key):
     e, n = public_key
     imza_int = int(imza_hex, 16)
     
-    # 1. İmzadan özeti elde et (m = s^e mod n)
     ozet_int_verify = pow(imza_int, e, n)
     
-    # 2. Mesajın gerçek özetini al
     ozet_hex = sha2_sifrele(metin)
     ozet_int_original = int(ozet_hex, 16)
     

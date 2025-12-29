@@ -3,6 +3,7 @@ import math
 alfabe = "abcdefghijklmnopqrstuvwxyz"
 m = len(alfabe)
 
+# Modüler ters bulma (a^-1 mod m)
 def mod_inverse(a, m):
     for i in range(1, m):
         if (a * i) % m == 1:
@@ -24,7 +25,7 @@ def affine_desifrele(cipher_text, a, b):
     if a_inv is None:
         raise ValueError(f"a={a} için mod {m} altında ters yok!")
     
-    for char in cipher_text.upper():
+    for char in cipher_text.lower():
         if char in alfabe:
             y = alfabe.index(char)
             x = (a_inv * (y - b)) % m
@@ -32,4 +33,3 @@ def affine_desifrele(cipher_text, a, b):
         else:
             plain_text += char
     return plain_text
-
